@@ -34,9 +34,48 @@ class NotifyAttendance extends Command
             }
         })->filter();
 
+        $parsedMembers = $members->map(function ($member) {
+            $status = null;
+            $workTime = null;
+
+            foreach ($member['events'] as $event) {
+                if ($event->eventType === 'outOfOffice') {
+                    $status = $event->getSummary() ?: '不在';
+                    break;
+                }
+
+                if ($event->eventType === 'workingLocation' && $member['role'] === 'インターン') {
+                    $type = $event->getWorkingLocationProperties()?->getType();
+                    $status = ($type === 'homeOffice') ? 'リモート' : '出社';
+
+                    $start = $event->getStart()?->getDateTime();
+                    $end = $event->getEnd()?->getDateTime();
+                    if ($start && $end) {
+                        $startDt = \Illuminate\Support\Carbon::parse($start)->timezone('Asia/Tokyo');
+                        $endDt = \Illuminate\Support\Carbon::parse($end)->timezone('Asia/Tokyo');
+                        $workTime = $startDt->format('H:i') . '-' . $endDt->format('H:i');
+                    }
+                }
+            }
+
+            if (! $status) {
+                return null;
+            }
+
+            return [
+                'name' => $member['name'],
+                'role' => $member['role'],
+                'status' => $status,
+                'workTime' => $workTime,
+            ];
+        })->filter()->values();
+
         $text = view('slack.attendance', [
             'today' => $today,
-            'members' => $members,
+            'dateLine' => $today->format('Y年n月j日') . '(' . ['日', '月', '火', '水', '木', '金', '土'][$today->dayOfWeek] . ')',
+            'roles' => ['インターン', '社員'],
+            'parsedMembers' => $parsedMembers,
+            'groupedMembers' => $parsedMembers->groupBy('role'),
         ])->render();
 
         if (trim($text)) {
