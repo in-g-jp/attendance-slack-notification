@@ -21,7 +21,7 @@ class NotifyWeeklyReminder extends Command
         }
 
         $response = Http::post($webhookUrl, [
-            'text' => '<!channel> 来週の予定をGoogle Calenderに登録してください。'
+            'text' => "<!channel>\n来週の予定をGoogle Calenderに登録してください。"
         ]);
 
         if ($response->successful()) {
