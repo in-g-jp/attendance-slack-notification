@@ -82,7 +82,7 @@ envでカレンダーに登録する個人情報を管理している。
 
 ```bash
 # envファイルの値を修正する。
-vim .env(iを押して修正、:wqで終了)
+vim .env(iを押して修正、escを押した後:wq+enterで終了)
 
 # マイグレーションの実行
 php artisan migrate:fresh --seed
