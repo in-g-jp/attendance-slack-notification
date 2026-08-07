@@ -4,6 +4,7 @@ namespace App\Services\Attendance;
 
 use App\Repositories\CalendarRepository;
 use App\Services\Calendar\GoogleCalendarService;
+use App\Services\Slack\MentionBuilder;
 use App\Services\Slack\SlackNotifier;
 use Illuminate\Support\Carbon;
 use Throwable;
@@ -14,7 +15,8 @@ class AttendanceNotifier
         protected CalendarRepository $calendarRepo,
         protected GoogleCalendarService $googleService,
         protected EventParser $parser,
-        protected SlackNotifier $slack
+        protected SlackNotifier $slack,
+        protected MentionBuilder $mentionBuilder
     ) {
     }
 
@@ -59,6 +61,7 @@ class AttendanceNotifier
             'roles' => ['インターン', '社員'],
             'parsedMembers' => $parsedMembers,
             'groupedMembers' => $parsedMembers->groupBy('role'),
+            'mentionLine' => $this->mentionBuilder->build(),
         ])->render();
 
         $this->slack->sendText($text);

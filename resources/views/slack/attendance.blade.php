@@ -1,4 +1,7 @@
-@if(!empty($parsedMembers))*{{ $dateLine }}*
+@if(!empty($parsedMembers))@if($mentionLine !== ''){!! $mentionLine !!}
+
+@endif
+*{{ $dateLine }}*
 
 @foreach($roles as $role)
 @if(isset($groupedMembers[$role]))

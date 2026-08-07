@@ -4,6 +4,7 @@ namespace App\Services\Attendance;
 
 use App\Repositories\CalendarRepository;
 use App\Services\Calendar\GoogleCalendarService;
+use App\Services\Slack\MentionBuilder;
 use App\Services\Slack\SlackNotifier;
 use Illuminate\Support\Carbon;
 use Throwable;
@@ -14,7 +15,8 @@ class WeeklyReportNotifier
         protected CalendarRepository $calendarRepo,
         protected GoogleCalendarService $googleService,
         protected EventParser $parser,
-        protected SlackNotifier $slack
+        protected SlackNotifier $slack,
+        protected MentionBuilder $mentionBuilder
     ) {
     }
 
@@ -52,6 +54,7 @@ class WeeklyReportNotifier
             'start' => $start,
             'roles' => ['インターン', '社員'],
             'groupedMembers' => collect($members)->groupBy('role'),
+            'mentionLine' => $this->mentionBuilder->build(),
         ])->render());
     }
 }

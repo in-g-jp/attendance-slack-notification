@@ -30,6 +30,7 @@ return [
 
     'slack' => [
         'webhook_url' => env('SLACK_WEBHOOK_URL'),
+        'mention_user_id' => env('SLACK_MENTION_USER_ID'),
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
