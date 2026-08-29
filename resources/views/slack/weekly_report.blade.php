@@ -1,4 +1,4 @@
-@if($mentionLine !== ''){!! $mentionLine !!}
+@if($groupedMembers->isNotEmpty())@if($mentionLine !== ''){!! $mentionLine !!}
 
 @endif
 来週（{{ $start->format('n/j') }}〜）の予定一覧
@@ -15,3 +15,4 @@
 @endforeach
 @endif
 @endforeach
+@endif

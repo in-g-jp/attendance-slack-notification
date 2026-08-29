@@ -50,7 +50,6 @@ class WeeklyReportNotifier
         }
 
         $this->slack->sendText(view('slack.weekly_report', [
-            'members' => $members,
             'start' => $start,
             'roles' => ['インターン', '社員'],
             'groupedMembers' => collect($members)->groupBy('role'),

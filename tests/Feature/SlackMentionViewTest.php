@@ -76,7 +76,6 @@ class SlackMentionViewTest extends TestCase
         ];
 
         $text = view('slack.weekly_report', [
-            'members' => $members,
             'start' => Carbon::parse('2026-08-08'),
             'roles' => ['インターン', '社員'],
             'groupedMembers' => collect($members)->groupBy('role'),
@@ -98,7 +97,6 @@ class SlackMentionViewTest extends TestCase
         ];
 
         $text = view('slack.weekly_report', [
-            'members' => $members,
             'start' => Carbon::parse('2026-08-08'),
             'roles' => ['インターン', '社員'],
             'groupedMembers' => collect($members)->groupBy('role'),
@@ -107,5 +105,18 @@ class SlackMentionViewTest extends TestCase
 
         $this->assertStringNotContainsString('<@', $text);
         $this->assertStringStartsWith('来週（8/8〜）の予定一覧', ltrim($text));
+    }
+
+    public function test_weekly_report_view_renders_nothing_when_no_schedule_registered(): void
+    {
+        $text = view('slack.weekly_report', [
+            'start' => Carbon::parse('2026-08-22'),
+            'roles' => ['インターン', '社員'],
+            'groupedMembers' => collect()->groupBy('role'),
+            'mentionLine' => '<@U01ABCDE23>',
+        ])->render();
+
+        // No schedule means no message at all: neither the mention nor the heading.
+        $this->assertSame('', trim($text));
     }
 }
