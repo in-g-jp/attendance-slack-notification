@@ -48,6 +48,23 @@ class SlackMentionViewTest extends TestCase
         $this->assertStringStartsWith('*2026年8月7日(金)*', ltrim($text));
     }
 
+    public function test_attendance_view_renders_nothing_when_no_member_registered(): void
+    {
+        $members = collect();
+
+        $text = view('slack.attendance', [
+            'today' => Carbon::parse('2026-08-22'),
+            'dateLine' => '2026年8月22日(土)',
+            'roles' => ['インターン', '社員'],
+            'parsedMembers' => $members,
+            'groupedMembers' => $members->groupBy('role'),
+            'mentionLine' => '<@U01ABCDE23>',
+        ])->render();
+
+        // No attendance rows means no message at all: neither the mention nor the date line.
+        $this->assertSame('', trim($text));
+    }
+
     public function test_weekly_report_view_puts_mention_line_at_the_top(): void
     {
         $members = [

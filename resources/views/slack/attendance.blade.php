@@ -1,4 +1,4 @@
-@if(!empty($parsedMembers))@if($mentionLine !== ''){!! $mentionLine !!}
+@if($parsedMembers->isNotEmpty())@if($mentionLine !== ''){!! $mentionLine !!}
 
 @endif
 *{{ $dateLine }}*
