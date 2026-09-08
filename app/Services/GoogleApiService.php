@@ -19,9 +19,9 @@ class GoogleApiService
     public function __construct()
     {
         $this->client = new Client;
-        $this->client->setClientId(env('GOOGLE_CLIENT_ID'));
-        $this->client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
-        $this->client->refreshToken(env('GOOGLE_REFRESH_TOKEN'));
+        $this->client->setClientId(config('services.google.client_id'));
+        $this->client->setClientSecret(config('services.google.client_secret'));
+        $this->client->refreshToken(config('services.google.refresh_token'));
     }
 
     /**

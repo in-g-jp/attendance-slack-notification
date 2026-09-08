@@ -28,6 +28,12 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'refresh_token' => env('GOOGLE_REFRESH_TOKEN'),
+    ],
+
     'slack' => [
         'webhook_url' => env('SLACK_WEBHOOK_URL'),
         'mention_user_id' => env('SLACK_MENTION_USER_ID'),
